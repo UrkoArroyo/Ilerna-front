@@ -1,4 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -7,6 +8,15 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App {
-  protected readonly title = signal('footchromes');
+export class App implements OnInit {
+  protected title = signal('');
+  constructor(private readonly httpClient: HttpClient) {
+
+   }
+   ngOnInit(): void {
+      this.httpClient.get('http://localhost:3000/urko').subscribe( ({name}: any) => {
+          this.title.set(name as string);
+          console.log(name);
+      } );
+   }
 }
